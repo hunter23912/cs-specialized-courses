@@ -1,0 +1,111 @@
+# 安装必要软件
+sudo apt_get update
+sudo apt-get upgrade
+sudo apt-get install openssh-server vim
+
+# 创建公钥私钥
+cd .ssh
+ssh-keygen -t rsa -C "2814388011@qq.com"
+cat id_rsa.pub >> authorized_keys
+# 验证ssh连接
+ssh localhost
+exit
+
+# 安装java
+sudo apt-get install openjdk-8-jdk openjdk-8-jre
+
+# 设置环境变量
+vim ~/.bashrc
+# 第一行添加
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+# 应用设置
+source ~/.bashrc
+
+
+# 安装hadoop和spark
+cd ~
+# 传输Hadoop和spark到主机
+scp hadoop-2.7.1.tar.gz ubuntu@[]:~/hadoop-2.7.1.tar.gz
+scp spark-2.1.0-bin-with-hive.tgz ubuntu@[]:~/spark-2.1.0-bin-with-hive.tgz
+
+# 解压到指定目录
+sudo tar -zxf hadoop-2.7.1.tar.gz -C /usr/local
+sudo tar -zxf spark-2.1.0-bin-with-hive.tgz -C /usr/local
+cd /usr/local
+
+# 修改文件所有权和文件名
+sudo chown -R ubuntu:root ./spark-2.1.0-bin-h27hive
+sudo chown -R ubuntu:root ./hadoop-2.7.1
+mv spark-2.1.0-bin-h27hive spark
+mv hadoop-2.7.1 hadoop
+# 验证hadoop安装
+bin/hadoop version
+
+# 为spark添加环境变量
+cd /spark/conf/
+cp spark-env.sh.template spark-env.sh
+vim spark-env.sh
+# 第一行添加
+export SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath)
+# 验证spark
+cd ..
+bin/run-example SparkPi
+
+# 配置hadoop集群环境
+cd 当前目录下的etc/Hadoop/
+vim slaves
+vim core-site.xml
+vim hdfs-site.xml
+mv mapred-site.xml.template mapred-site.xml
+vim mapred-site.xml
+vim yarn-site.xml
+
+cd ~/.ssh
+cat known_hosts
+
+# 至此配置完成，需要启动三份实例
+
+
+# 创建分布式文件系统
+sudo vim  /etc/hostname
+# 将用户名改为master, slave01, slave02 # 不要漏了0!!!
+sudo vim /etc/hosts   # 添加三台机器的 内网IP 以及 名称
+# 重启应用配置
+
+# 启动hadoop集群，在master主机中
+cd /usr/local/Hadoop
+# 格式化(第二次启动时候不能格式化)
+bin/hdfs namenode -format
+# 如果datanode启动失败，修改VERSION文件中的clusterID与master上的一致
+cat /usr/local/hadoop/tmp/dfs/name/current/VERSION
+# 启动脚本
+sbin/start-all.sh
+# 验证hadoop集群是启动
+jps # master有四个进程，另两个slave有3个进程
+# 创建目录
+bin/hdfs dfs -mkdir -p /user/ubuntu # 一定要是user不是usr
+# 创建目录
+bin/hdfs dfs -mkdir input
+# 上传文件
+vim people.json
+bin/hdfs dfs -put people.json
+bin/hdfs dfs -ls
+# 下载文件
+bin/hdfs dfs -get people.json
+
+# 第二次，直接启动spark-sql，不用创建文件夹
+cd ..
+cd spark/
+# 启动sql
+bin/spark-sql
+# 导入people.json文件
+create table jsontable
+using org.apache.spark.sql.json
+options(path "people.json");
+# 查看表
+show tables;
+# 查看表内容
+select * from jsontable;
+
+# spark-sql中，增加并行数
+SET spark.sql.shuffle.partitions=1000;

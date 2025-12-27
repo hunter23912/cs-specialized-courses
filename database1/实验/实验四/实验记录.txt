@@ -1,0 +1,132 @@
+# 如何导入数据集到spark-sql
+create table relation(
+    referrer int,
+    referree int
+)
+using csv
+options(
+    path "./large_relation",
+    delimiter ' ',
+    header 'false'
+);
+
+
+# mysql中可行的方法
+create table com_union_relation
+select distinct a.referrer as web1, b.referrer as web2,
+count(a.referree) as com_cnt,
+(select count(distinct referree) from relation where referrer = a.referrer)
++(select count(distinct referree) from relation where referrer = b.referrer)
+-count(a.referree) as union_cnt
+from relation a join relation b on a.referree = b.referree where a.referrer < b.referrer group by a.referrer, b.referrer;
+
+# spark-sql中可行的方法
+create table com_uni_relation
+WITH ref_counts AS (
+    SELECT referrer, COUNT(DISTINCT referree) AS ref_count
+    FROM relation
+    GROUP BY referrer
+)
+SELECT DISTINCT a.referrer AS web1, b.referrer AS web2,
+    COUNT(a.referree) AS com_cnt,
+    (rc1.ref_count + rc2.ref_count - COUNT(a.referree)) AS union_cnt
+FROM relation a
+JOIN relation b ON a.referree = b.referree
+JOIN ref_counts rc1 ON a.referrer = rc1.referrer
+JOIN ref_counts rc2 ON b.referrer = rc2.referrer
+WHERE a.referrer < b.referrer
+GROUP BY a.referrer, b.referrer, rc1.ref_count, rc2.ref_count;
+
+create table result select *, com_cnt/union_cnt as similarity from com_uni_relation;
+
+####################################################################
+
+- 在relation上交集
+```
+create table relation_common
+select t1.referrer as web1, t2.referrer as web2, count(distinct t1.referree) as common_cnt
+from relation t1
+join relation t2
+on t1.referree = t2.referree and t1.referrer < t2.referrer
+group by t1.referrer, t2.referrer;
+```
+
+- 在demo上选交集
+```
+create table demo_common
+select t1.web as web1, t2.web as web2, count(distinct t1.ref) as common_cnt
+from demo t1
+join demo t2
+on t1.ref = t2.ref and t1.web < t2.web
+group by t1.web, t2.web;
+```
+
+- 在ralation上选并集
+```
+SELECT a.referrer AS web1, b.referrer AS web2, COUNT(DISTINCT d.referree) AS union_cnt
+FROM relation a
+JOIN relation b ON a.referrer < b.referrer
+JOIN relation d ON d.referrer = a.referrer OR d.referrer = b.referrer
+GROUP BY a.referrer, b.referrer;
+```
+
+```
+SELECT a.referrer AS web1, b.referrer AS web2, COUNT(DISTINCT d.referree) AS union_cnt
+FROM (select * from relation limit 1000) as a
+JOIN (select * from relation limit 1000) as b ON a.referrer < b.referrer
+JOIN (select * from relation limit 1000) as d ON d.referrer = a.referrer OR d.referrer = b.referrer
+GROUP BY a.referrer, b.referrer;
+```
+
+- 在demo上选并集
+```
+create table demo_union
+SELECT a.web AS web1, b.web AS web2, COUNT(DISTINCT d.ref) AS union_cnt
+FROM demo a
+JOIN demo b ON a.web < b.web
+JOIN demo d ON d.web = a.web OR d.web = b.web
+GROUP BY a.web, b.web;
+```
+
+- 使用union进行优化
+```
+SELECT a.web AS web1, b.web AS web2, COUNT(DISTINCT d.ref) AS union_cnt
+FROM demo a
+JOIN demo b ON a.web < b.web
+JOIN demo d ON d.web = a.web
+GROUP BY a.web, b.web
+UNION
+SELECT a.web AS web1, b.web AS web2, COUNT(DISTINCT d.ref) AS union_cnt
+FROM demo a
+JOIN demo b ON a.web < b.web
+JOIN demo d ON d.web = b.web
+GROUP BY a.web, b.web;
+
+- 保存相似度结果
+```
+SELECT 
+    c.web1, 
+    c.web2, 
+c.common_cnt,
+u.union_cnt,
+    ROUND(c.common_cnt / u.union_cnt, 4) AS similarity
+FROM 
+    demo_common c
+JOIN 
+    demo_union u
+ON 
+    c.web1 = u.web1 AND c.web2 = u.web2;
+```
+
+SELECT 
+    c.web1, 
+    c.web2, 
+c.common_cnt,
+u.union_cnt,
+    ROUND(c.common_cnt / u.union_cnt, 4) AS similarity
+FROM 
+    test_common c
+JOIN 
+    test_union u
+ON 
+    c.web1 = u.web1 AND c.web2 = u.web2;
