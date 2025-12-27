@@ -1,0 +1,25 @@
+const n = 10;  { 常量n定义为10，这是我们要加到的数字的上限 }
+var sum, I, lihai, a5;   { 声明变量sum用于存储总和，变量i用于循环计数 }
+
+procedure readInt(var x);  { 过程readInt用于从用户那里读取一个整数 }
+    begin
+        { 读取整数的代码将在这里，这通常是系统提供的 }
+    end;
+
+procedure writeInt(x);  { 过程writeInt用于将一个整数打印到屏幕 }
+    begin
+        { 打印整数的代码将在这里，这通常是系统提供的 }
+    end;
+
+begin  { 主程序开始 }
+    sum := 0;  { 初始化总和为0 }
+    i := 1;    { 初始化循环计数器为1 }
+
+    while i <= n do  { 当i小于等于n时循环 }
+        begin
+            sum := sum + i;  { 将i加到sum上 }
+            i := i + 1;      { 将i增加1 }
+        end;
+
+    writeInt(sum)  { 打印总和 }
+end.  { 主程序结束 }

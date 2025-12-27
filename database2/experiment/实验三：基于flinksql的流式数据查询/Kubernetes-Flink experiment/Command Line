@@ -1,0 +1,84 @@
+# Install Docker https://docs.docker.com/engine/install/ubuntu/
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+# Install docker via apt-get and run hello-world example
+apt-cache madison docker-ce | awk '{ print $3 }'
+VERSION_STRING=5:19.03.9~3-0~ubuntu-focal
+
+sudo apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo docker run hello-world
+
+
+# Install three components of Kubernetes 1.18
+# Change the Aliyun source for Kubernetes
+sudo apt-get install apt-transport-https
+curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
+sudo vim /etc/apt/sources.list.d/kubernetes.list
+# add content: deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+sudo apt-get update
+
+sudo apt-get install -y kubelet=1.18.0-00 kubeadm=1.18.0-00 kubectl=1.18.0-00
+kubeadm version
+
+# Launch the master node
+sudo swapoff -a
+sudo kubeadm init --apiserver-advertise-address=172.19.0.7 --image-repository registry.aliyuncs.com/google_containers --service-cidr=10.96.0.0/12  --pod-network-cidr=10.244.0.0/16
+
+
+# Set kubectl in master node
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# Set flannel in master node
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+kubectl get pods --all-namespaces
+
+
+# Install JAVA and Setup environment path
+sudo apt-get install openjdk-8-jre openjdk-8-jdk
+vim ~/.bashrc
+# export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+source ~/.bashrc
+
+# Install Flink
+wget https://archive.apache.org/dist/flink/flink-1.16.0/flink-1.16.0-bin-scala_2.12.tgz 
+sudo tar -zxvf flink-1.16.0-bin-scala_2.12.tgz -C /usr/local
+sudo mv flink-1.16.2 flink
+sudo chown -R ubuntu:root flink
+vim flink-conf.yaml 
+# rest.address: 0.0.0.0
+# rest.bind-address: 0.0.0.0
+./bin/start-cluster.sh 
+
+# Install Maven
+wget https://dlcdn.apache.org/maven/maven-3/3.9.4/binaries/apache-maven-3.9.4-bin.zip 
+sudo unzip apache-maven-3.9.4-bin.zip -d /usr/local
+sudo mv apache-maven-3.9.4 maven
+sudo chown -R ubuntu:root maven
+
+# Compile Flink application with Maven
+mkdir -p ./flinkapp/src/main/java
+cd ./flinkapp/src/main/java
+vim WordCountData.java
+vim WordCountTokenizer.java
+vim WordCount.java
+cd ~/flinkapp
+vim pom.xml
+find .
+/usr/local/maven/bin/mvn package
+/usr/local/flink/bin/flink run --class cn.edu.shu.WordCount ~/flinkapp/target/wordcount-1.0.jar 

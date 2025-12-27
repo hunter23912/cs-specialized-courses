@@ -1,0 +1,60 @@
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  namespace: default
+  name: largejob
+spec:
+  image: flink:1.16
+  flinkVersion: v1_16
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "12"
+  serviceAccount: flink
+  jobManager:
+    resource:
+      memory: "4096m" 
+      cpu: 2
+    podTemplate:
+      spec:
+        # nodeSelector:
+          # flink-role: jobmanager
+        tolerations:
+          - key: "node-role.kubernetes.io/master"
+            operator: "Exists"
+            effect: "NoSchedule"
+        containers:
+          - name: flink-main-container
+            volumeMounts:
+              - name: my-jar
+                mountPath: /opt/flink/largejob # 挂载目录
+        volumes:
+          - name: my-jar
+            hostPath:
+              path: /home/ubuntu/tableapp/upload 
+              type: Directory
+  taskManager:
+    resource:
+      memory: "51200m"
+      cpu: 12 # 每个taskmanager分配12个CPU
+    replicas: 3 # 启动2个taskmanager pod，调度到2个节点
+    podTemplate:
+      spec:
+        nodeSelector:
+          flink-role: taskmanager
+        tolerations:
+          - key: "node-role.kubernetes.io/master"
+            operator: "Exists"
+            effect: "NoSchedule"
+        containers:
+          - name: flink-main-container
+            volumeMounts:
+              - name: my-jar
+                mountPath: /opt/flink/largejob
+        volumes:
+          - name: my-jar
+            hostPath:
+              path: /home/ubuntu/tableapp/upload # 本地JAR所在目录
+              type: Directory
+  job:
+    jarURI: local:///opt/flink/largejob/inputfromfiledemo-1.0.jar
+    entryClass: cn.edu.shu.large_result # 填写作业的主类
+    parallelism: 36

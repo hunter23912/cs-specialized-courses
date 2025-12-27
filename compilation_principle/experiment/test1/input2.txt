@@ -1,0 +1,41 @@
+const a=lO; 
+var b,c; 
+procedure p; 
+begin 
+c •=b+a 
+end; 
+begin 
+read(b); 
+while b#O do 
+begin 
+call p; write(2 * c); read(b) 
+end 
+end. 
+
+ var m,n,r, q; ｛计算m和n的最大公约数｝
+procedure gcd; 
+    begin 
+while r# 0 do 
+begin 
+end 
+end; 
+q •=m / n; 
+r •=m -q * n; 
+m :=n; 
+n •=r; 
+begin 
+end. 
+read(m); 
+read(n); 
+｛为了方便，规定m>=n}
+ if m<n then 
+begin 
+end; 
+r •=m; 
+m •=n; 
+n •=r; 
+begin 
+end; 
+r •=l; 
+call gcd; 
+write(m); 

@@ -1,0 +1,8 @@
+# ninja log v6
+3	501	7687159153449516	CMakeFiles/test_program.dir/src/Parser.cpp.obj	c44967cceb35d7d0
+3	591	7687159288662977	CMakeFiles/test_program.dir/tests/test.cpp.obj	d123182877a0a7a5
+43	575	7687159153845269	CMakeFiles/test_program.dir/src/CodeGenerator.cc.obj	4ba5e7fe349e8a54
+2	594	7687115753400719	CMakeFiles/test_program.dir/src/Lexer.cpp.obj	3ed3a9624bdaaedf
+592	774	7687159294524997	test_program.exe	16ec7928e99bd7ae
+30	494	7687159153715679	CMakeFiles/test_program.dir/src/SemanticAnalyzer.cc.obj	ffd62643055f031b
+16	408	7687159153585947	CMakeFiles/test_program.dir/src/SymbolTable.cc.obj	c544844265d908bd

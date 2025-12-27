@@ -1,0 +1,38 @@
+[
+{
+  "directory": "D:/Desktop/third_spring/compilation_principle/experiment/test2/build",
+  "command": "d:\\clang+llvm-20.1.1\\bin\\clang++.exe -ID:/Desktop/third_spring/compilation_principle/experiment/test2/include -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17 -o CMakeFiles\\test_program.dir\\src\\Lexer.cpp.obj -c D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\Lexer.cpp",
+  "file": "D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\Lexer.cpp",
+  "output": "CMakeFiles\\test_program.dir\\src\\Lexer.cpp.obj"
+},
+{
+  "directory": "D:/Desktop/third_spring/compilation_principle/experiment/test2/build",
+  "command": "d:\\clang+llvm-20.1.1\\bin\\clang++.exe -ID:/Desktop/third_spring/compilation_principle/experiment/test2/include -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17 -o CMakeFiles\\test_program.dir\\src\\Parser.cpp.obj -c D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\Parser.cpp",
+  "file": "D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\Parser.cpp",
+  "output": "CMakeFiles\\test_program.dir\\src\\Parser.cpp.obj"
+},
+{
+  "directory": "D:/Desktop/third_spring/compilation_principle/experiment/test2/build",
+  "command": "d:\\clang+llvm-20.1.1\\bin\\clang++.exe -ID:/Desktop/third_spring/compilation_principle/experiment/test2/include -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17 -o CMakeFiles\\test_program.dir\\src\\SymbolTable.cc.obj -c D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\SymbolTable.cc",
+  "file": "D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\SymbolTable.cc",
+  "output": "CMakeFiles\\test_program.dir\\src\\SymbolTable.cc.obj"
+},
+{
+  "directory": "D:/Desktop/third_spring/compilation_principle/experiment/test2/build",
+  "command": "d:\\clang+llvm-20.1.1\\bin\\clang++.exe -ID:/Desktop/third_spring/compilation_principle/experiment/test2/include -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17 -o CMakeFiles\\test_program.dir\\src\\SemanticAnalyzer.cc.obj -c D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\SemanticAnalyzer.cc",
+  "file": "D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\SemanticAnalyzer.cc",
+  "output": "CMakeFiles\\test_program.dir\\src\\SemanticAnalyzer.cc.obj"
+},
+{
+  "directory": "D:/Desktop/third_spring/compilation_principle/experiment/test2/build",
+  "command": "d:\\clang+llvm-20.1.1\\bin\\clang++.exe -ID:/Desktop/third_spring/compilation_principle/experiment/test2/include -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17 -o CMakeFiles\\test_program.dir\\src\\CodeGenerator.cc.obj -c D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\CodeGenerator.cc",
+  "file": "D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\src\\CodeGenerator.cc",
+  "output": "CMakeFiles\\test_program.dir\\src\\CodeGenerator.cc.obj"
+},
+{
+  "directory": "D:/Desktop/third_spring/compilation_principle/experiment/test2/build",
+  "command": "d:\\clang+llvm-20.1.1\\bin\\clang++.exe -ID:/Desktop/third_spring/compilation_principle/experiment/test2/include -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17 -o CMakeFiles\\test_program.dir\\tests\\test.cpp.obj -c D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\tests\\test.cpp",
+  "file": "D:\\Desktop\\third_spring\\compilation_principle\\experiment\\test2\\tests\\test.cpp",
+  "output": "CMakeFiles\\test_program.dir\\tests\\test.cpp.obj"
+}
+]
