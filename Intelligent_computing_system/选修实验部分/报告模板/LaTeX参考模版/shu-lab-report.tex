@@ -1,0 +1,134 @@
+%!TEX program = xelatex
+% 完整编译: xelatex -> biber/bibtex -> xelatex -> xelatex
+\documentclass[lang=cn,a4paper]{shu-lab-report}
+
+
+% 本文档命令
+\usepackage{array}
+\newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+\renewcommand{\lstlistingname}{代码}
+
+
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The Cover Page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\thispagestyle{empty}
+
+~\\
+
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=10.5cm]{image/shulogo.png}
+\end{figure}
+
+
+\vspace{12mm}
+
+\centerline{\kaishu\Huge{2024-2025学年冬季学期}}
+
+\vspace{6mm}
+
+\centerline{\kaishu\Huge{《智能计算系统》(08696037)}}
+
+\vspace{6mm}
+
+\centerline{\kaishu\Huge{实验报告}}
+
+
+\vspace{16mm}
+
+\begin{center}
+\renewcommand\arraystretch{1.5}
+\begin{tabular}{r c}
+    \makebox[8em][s]{\LARGE{姓名}}    & \LARGE{XXX}\\  \cmidrule(l){2-2} 
+    \makebox[8em][s]{\LARGE{学号}}    & \LARGE{2212XXXX}\\  \cmidrule(l){2-2} 
+    \makebox[8em][s]{\LARGE{实验名称}} & \LARGE{基于 Code Llama 实现代码生成}\\     \cmidrule(l){2-2} 
+    \makebox[8em][s]{\LARGE{日期}}    & \LARGE{2025年X月X日}\\ \cmidrule(l){2-2}
+\end{tabular}
+\end{center}
+
+\vspace{8mm}
+
+\begin{table}[!htp]
+        \renewcommand{\arraystretch}{1.5} % 仅影响此表的行高，行高设置为默认的1.5倍
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{\Large \textbf{实验 (70分)}} & \Large 目标1 & \Large 目标2 & \Large 目标3 & \Large 得分 \\ \cline{2-5}
+		                                    &             &             &             &            \\ \hline
+		\multirow{2}{*}{\Large \textbf{报告 (30分)}} & \Large 代码 (10分) & \Large 结果 (10分) & \Large 格式 (10分) & \Large 得分 \\ \cline{2-5}
+		                                    &             &             &             &            \\ \hline
+		\multicolumn{2}{|c|}{\Large \textbf{批阅人}} & \multicolumn{2}{c|}{\Large \textbf{批阅日期}} & \Large \textbf{总得分} \\ \hline
+		\multicolumn{2}{|c|}{}              & \multicolumn{2}{c|}{}              &            \\ \cline{1-2} \cline{3-5}
+	\end{tabular}
+\end{table}
+
+\vspace{6mm}
+
+\centerline{\kaishu\Large{上海大学\ 计算机工程与科学学院}}
+
+
+%%%%%%
+\newpage
+\hypersetup{linkcolor=black,citecolor=black}
+\tableofcontents
+%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The Content
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\setcounter{page}{1}
+
+
+\section{实验1 多环境OpenMP程序的编译和运行}
+
+\subsection{实验目的}
+\begin{itemize}
+\item[$\bullet$] 掌握OpenMP并行编程基础
+\item[$\bullet$] 掌握在Linux平台上编译和运行OpenMP程序
+\item[$\bullet$] 掌握在Windows平台上编译和运行OpenMP程序
+\end{itemize}
+
+
+\subsection{实验步骤}
+
+\subsubsection{Linux下OpenMP程序的编译和运行}
+
+\begin{itemize}
+\item[$\bullet$]\textbf{编译环境配置}
+\end{itemize}
+
+\par GNU 编译器集合是一系列用于语言开发的编译器和库的集合，包括: C、 C++、 Objective-C、Fortran、Ada和Go等编程语言。很多开源项目，包括 Linux\ Kernel和 GNU 工具，都是使用 GCC 进行编译的。
+\par 默认的 Ubuntu 软件源包含了一个软件包组，名称为 "build-essential",它包含了 GNU 编辑器集合，GNU 调试器，和其他编译软件所必需的开发库和工具。
+想要安装开发工具软件包，以拥有 sudo 权限用户身份或者 root 身份运行下面的命令：
+\begin{lstlisting}[language=C, caption={安装命令}, label={code:install}]
+sudo apt-get update
+sudo apt-get install build-essential
+\end{lstlisting}
+\par 这个命令将会安装一系列软件包，包括GCC、G++和Make。安装完成后，即可编译运行程序。
+
+\begin{itemize}
+\item[$\bullet$]\textbf{编译与运行}
+\end{itemize}
+\par 编写串行、并行但代码中不设置线程数（即默认线程），以及代码中设置8个线程的HelloWorld程序，并用下述命令编译程序。
+\begin{lstlisting}[language=C, caption={编译命令}, label={code:compile}]
+gcc -fopenmp -O2 -o helloomp.out helloworld.c
+\end{lstlisting}
+\par 编译完成后，输入./helloomp.out即可运行程序，运行结果如下所示：
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{image/shulogo.png}
+    \caption{Linux下helloworld.c运行结果}
+    \label{fig:Linux_OMP}
+\end{figure}
+
+\end{document}
