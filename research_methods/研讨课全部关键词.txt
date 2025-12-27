@@ -1,0 +1,37 @@
+虚拟化与容器技术
+云原生与Kubernetes(K8S)
+MapReduce\HDFS\Hadoop总体架构
+深度学习基础
+卷积神经网络CNN
+注意力机制与Transformer
+异构计算与GPU
+公开数据集
+计算机视觉：目标分类、目标检测、目标分割
+自然语言理解：应用场景和关键技术
+智能问答机器人：解决方案
+知识图谱：应用场景和关键技术
+智能推荐系统
+深度学习框架：Pytorch\TensorFlow
+英伟达AI软件堆栈全景分析
+英伟达AI工具：cuDNN\TensorRT\NIM
+英伟达GH200介绍
+智能计算芯片
+华为ModelArts\MindStudio\MindSpore
+华为智能计算芯片昇腾及板卡
+分布式深度学习
+具身机器人技术
+大语言模型综述（定义、影响、发展历程、机遇与挑战）
+ChatGPT介绍
+大语言模型预训练技术（数据、算法、算力）
+大语言模型微调技术（概述、有监督微调SFT、强化学习）
+大语言模型使能技术I（提示词：工程Prompting Engeering）
+大语言模型使能技术Ⅱ（智能体AI Agent）
+多模态大模型介绍
+AI for Science
+工业软件CAD\CAE\EDA
+数据治理
+数字孪生：应用场景与关键技术
+区块链：应用场景与关键技术
+通用处理芯片指令集：x86、RISC、RISC-V
+操作系统：服务器、PC、手机端操作系统全景
+生成式AI
